@@ -115,6 +115,7 @@ class SchedulerManager(manager.Manager):
         conductors that handle certain move operations.
         """
         LOG.debug("Starting to schedule for instances: %s", instance_uuids)
+        LOG.debug("tpsilva demo - Scheduler will select the best host for this call")
 
         # TODO(sbauza): Change the method signature to only accept a spec_obj
         # argument once API v5 is provided.

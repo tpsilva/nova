@@ -3048,6 +3048,7 @@ class LibvirtDriver(driver.ComputeDriver):
     def spawn(self, context, instance, image_meta, injected_files,
               admin_password, allocations, network_info=None,
               block_device_info=None):
+        LOG.debug("tpsilva demo - libvirt driver received the spawn method call")
         disk_info = blockinfo.get_disk_info(CONF.libvirt.virt_type,
                                             instance,
                                             image_meta,
@@ -3072,6 +3073,7 @@ class LibvirtDriver(driver.ComputeDriver):
                                   disk_info, image_meta,
                                   block_device_info=block_device_info,
                                   mdevs=mdevs)
+        LOG.debug("tpsilva demo - libvirt driver making actual call to QEMU/KVM to spawn the VM")
         self._create_domain_and_network(
             context, xml, instance, network_info,
             block_device_info=block_device_info,

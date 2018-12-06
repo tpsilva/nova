@@ -1539,7 +1539,8 @@ class ComputeManager(manager.Manager):
     def _build_networks_for_instance(self, context, instance,
             requested_networks, security_groups):
 
-        # If we're here from a reschedule the network may already be allocated.
+        LOG.debug("tpsilva demo - CPU Manager _build_networks_for_instance will call Neutron to setup networks")
+		# If we're here from a reschedule the network may already be allocated.
         if strutils.bool_from_string(
                 instance.system_metadata.get('network_allocated', 'False')):
             # NOTE(alex_xu): The network_allocated is True means the network
@@ -1683,6 +1684,7 @@ class ComputeManager(manager.Manager):
 
     def _prep_block_device(self, context, instance, bdms):
         """Set up the block device for an instance with error logging."""
+        LOG.debug("tpsilva demo - CPU Manager _prep_block_device called to set up block device that will be used")
         try:
             self._add_missing_dev_names(bdms, instance)
             block_device_info = driver.get_block_device_info(instance, bdms)
@@ -1822,6 +1824,7 @@ class ComputeManager(manager.Manager):
                      injected_files=None, requested_networks=None,
                      security_groups=None, block_device_mapping=None,
                      node=None, limits=None, host_list=None):
+        LOG.debug("tpsilva demo - CPU Manager received RPC call to build_and_run_instance")
 
         @utils.synchronized(instance.uuid)
         def _locked_do_build_and_run_instance(*args, **kwargs):
@@ -1916,6 +1919,7 @@ class ComputeManager(manager.Manager):
             requested_networks, security_groups, block_device_mapping,
             node=None, limits=None, host_list=None):
 
+        LOG.debug("tpsilva demo - CPU Manager _do_build_and_run_instance method called by synched method")
         try:
             LOG.debug('Starting instance...', instance=instance)
             instance.vm_state = vm_states.BUILDING
@@ -2081,6 +2085,7 @@ class ComputeManager(manager.Manager):
             block_device_mapping, node, limits, filter_properties,
             request_spec=None):
 
+        LOG.debug("tpsilva demo - CPU Manager _build_and_run_instance internal method called")
         image_name = image.get('name')
         self._notify_about_instance_usage(context, instance, 'create.start',
                 extra_usage_info={'image_name': image_name})
@@ -2124,6 +2129,7 @@ class ComputeManager(manager.Manager):
                     LOG.debug('Start spawning the instance on the hypervisor.',
                               instance=instance)
                     with timeutils.StopWatch() as timer:
+                        LOG.debug("tpsilva demo - CPU Manager calling driver to spawn the VM")
                         self.driver.spawn(context, instance, image_meta,
                                           injected_files, admin_password,
                                           allocs, network_info=network_info,
@@ -2271,11 +2277,13 @@ class ComputeManager(manager.Manager):
     @contextlib.contextmanager
     def _build_resources(self, context, instance, requested_networks,
                          security_groups, image_meta, block_device_mapping):
+        LOG.debug("tpsilva demo - CPU Manager _build_resources called")
         resources = {}
         network_info = None
         try:
             LOG.debug('Start building networks asynchronously for instance.',
                       instance=instance)
+            LOG.debug("tpsilva demo - CPU Manager _build_resources preparing network")
             network_info = self._build_networks_for_instance(context, instance,
                     requested_networks, security_groups)
             resources['network_info'] = network_info
@@ -2295,6 +2303,7 @@ class ComputeManager(manager.Manager):
                     reason=msg)
 
         try:
+            LOG.debug("tpsilva demo - CPU Manager _build_resources calling driver prepare_for_spawn")
             # Perform any driver preparation work for the driver.
             self.driver.prepare_for_spawn(instance)
 
@@ -2314,6 +2323,7 @@ class ComputeManager(manager.Manager):
             instance.task_state = task_states.BLOCK_DEVICE_MAPPING
             instance.save()
 
+            LOG.debug("tpsilva demo - CPU Manager _build_resources preparing block devices that will be used by instance")
             block_device_info = self._prep_block_device(context, instance,
                     block_device_mapping)
             resources['block_device_info'] = block_device_info

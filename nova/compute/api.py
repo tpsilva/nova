@@ -1203,6 +1203,7 @@ class API(base.Base):
             instances.append(instance)
             request_specs.append(rs)
 
+        LOG.debug("tpsilva demo - Compute API sent RPC to Conductor")
         if CONF.cells.enable:
             # NOTE(danms): CellsV1 can't do the new thing, so we
             # do the old thing here. We can remove this path once
@@ -1247,6 +1248,7 @@ class API(base.Base):
                 requested_networks=requested_networks,
                 block_device_mapping=block_device_mapping,
                 tags=tags)
+
 
         return instances, reservation_id
 
@@ -1700,6 +1702,7 @@ class API(base.Base):
 
         Returns a tuple of (instances, reservation_id)
         """
+        LOG.debug("tpsilva demo - Create method on Compute API")
         if requested_networks and max_count is not None and max_count > 1:
             self._check_multiple_instances_with_specified_ip(
                 requested_networks)

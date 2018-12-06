@@ -1248,9 +1248,11 @@ class ComputeTaskManager(base.Base):
                                      admin_password, injected_files,
                                      requested_networks, block_device_mapping,
                                      tags=None):
+        LOG.debug("tpsilva demo - Conductor Manager schedule_and_build_instances called via RPC")
         # Add all the UUIDs for the instances
         instance_uuids = [spec.instance_uuid for spec in request_specs]
         try:
+            LOG.debug("tpsilva demo - Conductor Manager will call scheduler to select the best host for this call")
             host_lists = self._schedule_instances(context, request_specs[0],
                     instance_uuids, return_alternates=True)
         except Exception as exc:
@@ -1396,6 +1398,7 @@ class ComputeTaskManager(base.Base):
             # pass the objects.
             legacy_secgroups = [s.identifier
                                 for s in request_spec.security_groups]
+            LOG.debug("tpsilva demo - Conductor Manager will send RPC call to selected CPU Manager build_and_run_instance")
             with obj_target_cell(instance, cell) as cctxt:
                 self.compute_rpcapi.build_and_run_instance(
                     cctxt, instance=instance, image=image,

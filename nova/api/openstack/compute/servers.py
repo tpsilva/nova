@@ -420,6 +420,7 @@ class ServersController(wsgi.Controller):
     @validation.schema(schema_servers.base_create_v267, '2.67')
     def create(self, req, body):
         """Creates a new server for a given user."""
+        LOG.debug("tpsilva demo -- Create method on api")
         context = req.environ['nova.context']
         server_dict = body['server']
         password = self._get_server_admin_password(server_dict)
